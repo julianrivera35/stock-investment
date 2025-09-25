@@ -1,14 +1,16 @@
 package service
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"log"
 	"net/http"
-	"os"
 	"net/url"
+	"os"
+	"time"
+
 	"github.com/joho/godotenv"
-	"encoding/json"
 )
 
 type ApiResponse struct {
@@ -16,7 +18,7 @@ type ApiResponse struct {
 	NextPage string                   `json:"next_page,omitempty"`
 }
 
-// ApiGet fetches data from the API and returns it in a JSON format
+// ApiGet fetches data from the API and saves it to the database
 func ApiGet() {
 	err := godotenv.Load()
 	if err != nil {
@@ -52,18 +54,26 @@ func ApiGet() {
 		resp, err := client.Do(req)
 		if err != nil {
 			log.Println("Error sending request")
+			break
 		}
 		defer resp.Body.Close()
+
+		if resp.StatusCode != http.StatusOK {
+			log.Printf("Error: Status code %d", resp.StatusCode)
+			break
+		}
 
 		body, err := io.ReadAll(resp.Body)
 		if err != nil {
 			log.Println("Error reading response body")
+			break
 		}
 
 		var apiResponse ApiResponse
 		err = json.Unmarshal(body, &apiResponse)
 		if err != nil {
 			log.Println("Error unmarshalling response body")
+			break
 		}
 
 		allItems = append(allItems, apiResponse.Items...)
@@ -75,15 +85,83 @@ func ApiGet() {
 
 		fmt.Printf("Retrieved %d items, fetching next page: %s\n", len(apiResponse.Items), nextPage)
 	}
-	finalResponse := map[string]interface{}{
-		"total_items": len(allItems),
-		"items": allItems,
+	fmt.Printf("🔄 Starting data processing with %d total items...\n", len(allItems))
+
+	recommendations := make([]RecommendationData, 0, len(allItems))
+
+	fmt.Println("🔄 Converting API data to RecommendationData structs...")
+	//Transform API data to RecommendationData structs
+	for i, item := range allItems {
+		if i%100 == 0 { // Progress every 100 items
+			fmt.Printf("�� Processing item %d/%d\n", i, len(allItems))
+		}
+
+		rec, err := convertRecommendationData(item)
+		if err != nil {
+			log.Printf("Error converting recommendation data %d: %v", i, err)
+			continue
+		}
+		recommendations = append(recommendations, rec)
 	}
 
-	finalJSON, err := json.MarshalIndent(finalResponse, "", "  ")
+	fmt.Printf("✅ Conversion complete! %d recommendations ready for database\n", len(recommendations))
+
+	fmt.Println("💾 Starting database insertion...")
+	//Store to database
+	err = SaveRecommendations(recommendations)
 	if err != nil {
-		log.Println("Error marshalling final response")
+		log.Printf("❌ Error saving recommendations: %v", err)
+	} else {
+		fmt.Printf("✅ Database insertion complete! %d recommendations saved\n", len(recommendations))
+	}
+
+	fmt.Println("📄 Generating final JSON response...")
+	//Log JSON response
+	finalReponse := map[string]interface{}{
+		"total_items": len(allItems),
+		"items":       allItems,
+	}
+	finalJSON, err := json.MarshalIndent(finalReponse, "", "  ")
+	if err != nil {
+		log.Println("❌ Error marshalling final response")
+	} else {
+		fmt.Println("✅ JSON response generated successfully")
 	}
 	fmt.Println(string(finalJSON))
+}
 
+func convertRecommendationData(item map[string]interface{}) (RecommendationData, error) {
+	var rec RecommendationData
+
+	// Helper function to get string from interface{}
+	getString := func(key string) string {
+		if val, ok := item[key]; ok && val != nil {
+			if str, ok := val.(string); ok {
+				return str
+			}
+		}
+		return ""
+	}
+
+	rec.Ticker = getString("ticker")
+	rec.TargetFrom = getString("target_from")
+	rec.TargetTo = getString("target_to")
+	rec.Company = getString("company")
+	rec.Action = getString("action")
+	rec.Brokerage = getString("brokerage")
+	rec.RatingFrom = getString("rating_from")
+	rec.RatingTo = getString("rating_to")
+
+	//Helper to parse time
+	timeStr := getString("time")
+	if timeStr != "" {
+		parsedTime, err := time.Parse(time.RFC3339, timeStr)
+		if err != nil {
+			return rec, fmt.Errorf("failed to parse time: %v", err)
+		}
+		rec.Time = parsedTime
+	} else {
+		return rec, fmt.Errorf("time is required")
+	}
+	return rec, nil
 }
