@@ -37,17 +37,11 @@
 
             <!-- Content based on view mode -->
             <div v-if="viewMode === 'table'">
-                <div class="card p-6">
-                    <h3 class="text-lg font-semibold mb-4">Recommendations Table</h3>
-                    <p class="text-gray-600">Table view coming soon...</p>
-                </div>
+                <RecommendationTable />
             </div>
 
             <div v-else>
-                <div class="card p-6">
-                    <h3 class="text-lg font-semibold mb-4">Recommendations Heatmap</h3>
-                    <p class="text-gray-600">Heatmap view coming soon...</p>
-                </div>
+                <Heatmap />
             </div>
         </div>
     </div>
@@ -58,6 +52,8 @@ import { ref, onMounted } from 'vue'
 import { useMainStore } from '@/stores'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
 import StatsCards from '@/components/StatsCards.vue'
+import RecommendationTable from '@/components/Tables/RecommendationTable.vue'
+import Heatmap from '@/components/Heatmap/Heatmap.vue'
 
 const store = useMainStore()
 const viewMode = ref<'table' | 'heatmap'>('table')

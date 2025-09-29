@@ -12,7 +12,7 @@ export const useMainStore = defineStore("main", () => {
   const loadingProgress = ref(0);
   const totalRecommendations = ref(0);
   const error = ref<string | null>(null);
-  const dataFetched = ref(false); // Add this flag
+  const dataFetched = ref(false);
 
   //Computed
   const currentRecommendationCount = computed(
@@ -65,7 +65,7 @@ export const useMainStore = defineStore("main", () => {
       console.log('🚀 Starting to fetch recommendations...')
       loading.value = true;
       error.value = null;
-      recommendations.value = []; // Clear existing data
+      recommendations.value = [];
 
       const limit = 100;
       let offset = 0;
@@ -102,7 +102,7 @@ export const useMainStore = defineStore("main", () => {
         }
       }
       
-      dataFetched.value = true; // Mark as fetched
+      dataFetched.value = true;
       console.log('🎉 All data fetched successfully!')
       
     } catch (err) {
@@ -140,9 +140,9 @@ export const useMainStore = defineStore("main", () => {
     recommendations,
     loading,
     loadingProgress,
-    totalRecommendations: computed(() => totalRecommendations.value), // Fix this line
+    totalRecommendations: computed(() => totalRecommendations.value),
     error,
-    dataFetched, // Add this
+    dataFetched,
 
     //Computed
     currentRecommendationCount,
