@@ -13,21 +13,10 @@ A full-stack application that aggregates analyst recommendations and provides AI
 - **AI Investment Algorithm**: Smart scoring system analyzing 6 key factors to recommend best stocks
 - **Responsive Design**: Professional financial dashboard that works on all devices
 
-## ��️ Architecture
+## Architecture
 
-```markdown:README.md
-<code_block_to_apply_changes_from>
-```
-┌─────────────────┐    HTTP API    ┌─────────────────┐
-│   Vue.js 3      │ ◄─────────────► │   Go Backend    │
-│   Frontend      │                 │                 │
-│                 │                 │                 │
-│ • TypeScript    │                 │ • Gin/Gorilla   │
-│ • Pinia Store   │                 │ • PostgreSQL    │
-│ • TailwindCSS   │                 │ • REST API      │
-│ • Vite          │                 │ • Data Fetching │
-└─────────────────┘                 └─────────────────┘
-```
+<img width="441" height="157" alt="image" src="https://github.com/user-attachments/assets/91376ff2-5fab-4b46-9082-bd59eb4e2a82" />
+
 
 ## 📦 Project Structure
 
@@ -64,7 +53,7 @@ stock-investment/
 ### 1. Clone the Repository
 
 ```bash
-git clone <repository-url>
+git clone <git@github.com:julianrivera35/stock-investment.git>
 cd stock-investment
 ```
 
@@ -81,6 +70,9 @@ nano .env
 
 # Install dependencies
 go mod download
+
+#To load data from an external API to your database
+go run main.go -fetch
 
 # Run the backend
 go run main.go -api -port=8080
@@ -231,27 +223,34 @@ npm run type-check
 ## 🎨 Screenshots
 
 ### Dashboard
+<img width="1359" height="829" alt="image" src="https://github.com/user-attachments/assets/c5e33f97-1e62-4349-81cf-cbc5e117b00d" />
+<img width="1363" height="824" alt="image" src="https://github.com/user-attachments/assets/21b39bea-c0cd-45f8-b1d6-fa64f4bb1890" />
 
 
 ### Recommendations Table
+<img width="1251" height="809" alt="image" src="https://github.com/user-attachments/assets/d662722f-71e9-456e-93a8-149a47337259" />
 
 
 ### Interactive Heatmap
+<img width="1250" height="621" alt="image" src="https://github.com/user-attachments/assets/3cb3febb-6444-4cb1-a030-a53f544a5b4a" />
 
+### Companies table
+<img width="1268" height="731" alt="image" src="https://github.com/user-attachments/assets/faff8fb5-18c5-48ba-9be3-dd07225884e4" />
+
+### Brokerages table
+<img width="1272" height="755" alt="image" src="https://github.com/user-attachments/assets/fb947242-3090-4187-a579-4d0bb91bef66" />
 
 
 ## 📝 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🔗 Links
-
 ## 📧 Contact
 
-Your Name - your.email@example.com
+Julián Camilo Rivera Monroy - jc.riveram1@unaindes.edu.co | julianrivermonroy@gmail.com
 
-Project Link: [https://github.com/your-username/stock-investment](https://github.com/your-username/stock-investment)
-```
+Project Link: https://github.com/julianrivera35/stock-investment
+
 
 ## **2. Backend .env.example**
 
@@ -264,35 +263,6 @@ DATABASE_URL=@localhost:5432/stock_investment
 # External API Configuration
 API_URL=https://your-external-api.com/api/recommendations
 BEARER_TOKEN=your_api_bearer_token
-
-# Server Configuration
-PORT=8080
-HOST=localhost
-
-# Environment
-ENVIRONMENT=development
-
-# CORS Configuration
-CORS_ALLOWED_ORIGINS=http://localhost:5173,http://localhost:3000
-
-# Logging
-LOG_LEVEL=info
-
-# Rate Limiting (requests per minute)
-RATE_LIMIT=1000
-
-# Database Pool Settings
-DB_MAX_CONNECTIONS=25
-DB_MAX_IDLE_CONNECTIONS=5
-DB_CONNECTION_MAX_LIFETIME=5m
-
-# SSL Mode for database connection
-# Options: disable, require, verify-ca, verify-full
-SSL_MODE=verify-full
-
-# Timeout settings (in seconds)
-HTTP_TIMEOUT=30
-DB_TIMEOUT=10
 ```
 
 ## **3. Frontend .env.example**
@@ -302,88 +272,6 @@ DB_TIMEOUT=10
 VITE_API_BASE_URL=http://localhost:8080
 VITE_API_VERSION=v1
 VITE_API_TIMEOUT=10000
-
-# Application Configuration
-VITE_APP_NAME=AnalystHub
-VITE_APP_VERSION=1.0.0
-VITE_APP_DESCRIPTION=Stock Investment Analyst Hub
-
-# Environment
-VITE_NODE_ENV=development
-
-# Features Flags
-VITE_ENABLE_ANALYTICS=false
-VITE_ENABLE_DEBUG=true
-VITE_ENABLE_MOCK_DATA=false
-
-# UI Configuration
-VITE_DEFAULT_PAGE_SIZE=25
-VITE_MAX_PAGE_SIZE=100
-VITE_ANIMATION_DURATION=300
-
-# External Services (if needed)
-VITE_GOOGLE_ANALYTICS_ID=
-VITE_SENTRY_DSN=
-
-# Development Settings
-VITE_HOT_RELOAD=true
-VITE_SOURCE_MAPS=true
-
-# Build Configuration
-VITE_BUILD_TARGET=es2020
-VITE_MINIFY=true
-```
-
-## **4. Additional Documentation Files**
-
-### **DEPLOYMENT.md**
-
-```markdown:DEPLOYMENT.md
-# 🚀 Deployment Guide
-
-## Production Deployment
-
-### Backend Deployment
-
-1. **Build the application:**
-```bash
-go build -o stock-investment-backend main.go
-```
-
-2. **Set production environment variables:**
-```bash
-export ENVIRONMENT=production
-export DATABASE_URL=your_production_db_url
-export API_URL=your_production_api_url
-```
-
-3. **Run the application:**
-```bash
-./stock-investment-backend -api -port=8080
-```
-
-### Frontend Deployment
-
-1. **Build for production:**
-```bash
-npm run build
-```
-
-2. **Deploy to static hosting:**
-```bash
-# Upload dist/ folder to your hosting provider
-# Examples: Netlify, Vercel, AWS S3, etc.
-```
-
-### Docker Deployment
-
-See `docker-compose.yml` for containerized deployment.
-
-### Environment-Specific Configurations
-
-- **Development**: Use `.env.local`
-- **Staging**: Use `.env.staging`
-- **Production**: Use `.env.production`
 ```
 
 ### **API.md**
