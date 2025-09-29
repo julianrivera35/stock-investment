@@ -60,7 +60,7 @@ func (s *Server) getRecommendations(w http.ResponseWriter, r *http.Request) {
 	limitStr := r.URL.Query().Get("limit")
 	offsetStr := r.URL.Query().Get("offset")
 	ticker := r.URL.Query().Get("ticker")
-	brokerageID := r.URL.Query().Get("borkerage_id")
+	brokerageID := r.URL.Query().Get("brokerage_id")
 
 	limit := 50
 	offset := 0

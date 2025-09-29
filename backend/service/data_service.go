@@ -190,26 +190,26 @@ func GetRecommendations(limit, offset int, ticker, brokerageID string) ([]Recomm
 	var recommendations []Recommendation
 	for rows.Next() {
 		var r Recommendation
-		var brokerageID, brokerageName *string
-		var brokerageCreatedAt, brokerageUpdatedAt *time.Time
+		var dbBrokerageID, dbBrokerageName *string
+		var dbBrokerageCreatedAt, dbBrokerageUpdatedAt *time.Time
 
 		err := rows.Scan(
 			&r.ID, &r.TargetFrom, &r.TargetTo, &r.RatingFrom, &r.RatingTo,
 			&r.Action, &r.Time, &r.CreatedAt, &r.UpdatedAt,
 			&r.Company.ID, &r.Company.Ticker, &r.Company.Name, &r.Company.CreatedAt, &r.Company.UpdatedAt,
-			&brokerageID, &brokerageName, &brokerageCreatedAt, &brokerageUpdatedAt,
+			&dbBrokerageID, &dbBrokerageName, &dbBrokerageCreatedAt, &dbBrokerageUpdatedAt,
 		)
 		if err != nil {
 			return nil, 0, fmt.Errorf("scan failed: %v", err)
 		}
 
 		//Handle multiple brokerages
-		if brokerageID != nil {
+		if dbBrokerageID != nil {
 			r.Brokerage = &Brokerage{
-				ID:        *brokerageID,
-				Name:      *brokerageName,
-				CreatedAt: *brokerageCreatedAt,
-				UpdatedAt: *brokerageUpdatedAt,
+				ID:        *dbBrokerageID,
+				Name:      *dbBrokerageName,
+				CreatedAt: *dbBrokerageCreatedAt,
+				UpdatedAt: *dbBrokerageUpdatedAt,
 			}
 		}
 		recommendations = append(recommendations, r)
