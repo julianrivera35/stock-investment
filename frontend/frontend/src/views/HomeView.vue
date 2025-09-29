@@ -25,17 +25,8 @@
                     </div>
                 </div>
 
-                <!-- Success message when fully loaded -->
-                <div v-if="!store.loading && store.loadingPercentage === 100" class="mb-6">
-                    <div class="bg-green-50 border border-green-200 rounded-lg p-4">
-                        <div class="flex items-center">
-                            <span class="text-green-700 text-sm">
-                                ✅ All {{ store.totalRecommendations.toLocaleString() }} recommendations loaded
-                                successfully!
-                            </span>
-                        </div>
-                    </div>
-                </div>
+                <!-- Investment Recommendations -->
+                <InvestmentRecommendations v-if="store.recommendations.length > 0" />
             </div>
         </div>
     </div>
@@ -46,6 +37,7 @@ import { onMounted } from 'vue'
 import { useMainStore } from '@/stores'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
 import StatsCards from '@/components/StatsCards.vue'
+import InvestmentRecommendations from '@/components/InvestmentRecommendations.vue'
 
 const store = useMainStore()
 

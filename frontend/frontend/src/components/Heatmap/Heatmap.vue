@@ -223,7 +223,7 @@ const topCompanies = computed(() => {
   })
   
   return Object.values(companyCounts)
-    .sort((a, b) => b.count - a.count)
+    .sort((a: { count: number }, b: { count: number }) => b.count - a.count)
     .slice(0, topCompaniesCount.value)
 })
 
@@ -239,14 +239,14 @@ const topBrokerages = computed(() => {
   })
   
   return Object.values(brokerageCounts)
-    .sort((a, b) => b.count - a.count)
+    .sort((a: { count: number }, b: { count: number }) => b.count - a.count)
     .slice(0, topBrokeragesCount.value)
 })
 
 const maxValue = computed(() => {
   let max = 0
-  Object.values(heatmapData.value).forEach(brokerageData => {
-    Object.values(brokerageData).forEach(recommendations => {
+  Object.values(heatmapData.value).forEach((brokerageData: any) => {
+    Object.values(brokerageData).forEach((recommendations: any) => {
       max = Math.max(max, recommendations.length)
     })
   })
@@ -317,7 +317,7 @@ function showCellDetails(brokerage: string, ticker: string) {
     return
   }
   
-  const company = topCompanies.value.find(c => c.ticker === ticker)?.name || ticker
+  const company = topCompanies.value.find((c: { ticker: string }) => c.ticker === ticker)?.name || ticker
   
   const upgrades = recommendations.filter(r => 
     r.action.toLowerCase().includes('raised') || r.action.toLowerCase().includes('upgrade')
