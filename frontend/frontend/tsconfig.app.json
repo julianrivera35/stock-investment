@@ -5,6 +5,11 @@
   "compilerOptions": {
     "composite": true,
     "baseUrl": ".",
+    "module": "ESNext",
+    "target": "ES2020",
+    "verbatimModuleSyntax": true,
+    "preserveValueImports": false,
+    "importsNotUsedAsValues": "remove",
     "paths": {
       "@/*": ["./src/*"]
     }

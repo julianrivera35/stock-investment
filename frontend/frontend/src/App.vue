@@ -1,94 +1,67 @@
 <script setup lang="ts">
-// Test component
+// App.vue is now just the layout - views handle their own logic
 </script>
 
 <template>
   <div class="min-h-screen bg-gray-50">
-    <div class="max-w-7xl mx-auto px-4 py-8">
-      <h1 class="text-3xl font-bold text-gray-900 mb-8">AnalystHub - Tailwind Test</h1>
-      
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="card">
-          <h2 class="text-lg font-semibold text-gray-900">Total Recommendations</h2>
-          <p class="text-3xl font-bold text-gray-600 mt-2">200</p>
-        </div>
-        
-        <div class="card">
-          <h2 class="text-lg font-semibold text-gray-900">Upgrades</h2>
-          <p class="text-3xl font-bold text-green-600 mt-2">80</p>
-        </div>
-        
-        <div class="card">
-          <h2 class="text-lg font-semibold text-gray-900">Downgrades</h2>
-          <p class="text-3xl font-bold text-red-600 mt-2">64</p>
+    <!-- Header with Navigation -->
+    <header class="bg-white shadow-sm border-b border-gray-200">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+          <!-- Logo -->
+          <div class="flex items-center">
+            <span class="text-2xl">📊</span>
+            <span class="ml-2 text-xl font-bold text-gray-900">AnalystHub</span>
+          </div>
+          
+          <!-- Navigation -->
+          <nav class="flex space-x-8">
+            <router-link
+              to="/"
+              class="nav-link"
+              :class="{ 'nav-link-active': $route.name === 'home' }"
+            >
+              Home
+            </router-link>
+            <router-link
+              to="/recommendations"
+              class="nav-link"
+              :class="{ 'nav-link-active': $route.name === 'recommendations' }"
+            >
+              Recommendations
+            </router-link>
+            <router-link
+              to="/companies"
+              class="nav-link"
+              :class="{ 'nav-link-active': $route.name === 'companies' }"
+            >
+              Companies
+            </router-link>
+            <router-link
+              to="/brokerages"
+              class="nav-link"
+              :class="{ 'nav-link-active': $route.name === 'brokerages' }"
+            >
+              Brokerages
+            </router-link>
+          </nav>
         </div>
       </div>
-      
-      <button class="btn-primary mt-6">Test Button</button>
-    </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+      <router-view />
+    </main>
   </div>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
+.nav-link {
+  @apply text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+.nav-link-active {
+  @apply text-blue-600 border-b-2 border-blue-600;
 }
 </style>
