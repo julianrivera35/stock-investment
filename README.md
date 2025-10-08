@@ -2,7 +2,6 @@
 
 A full-stack application that aggregates analyst recommendations and provides AI-powered investment insights. Built with Go backend and Vue.js frontend.
 
-![Stock Investment Hub](https://via.placeholder.com/800x400/4F46E5/FFFFFF?text=Stock+Investment+Hub)
 
 ## 🚀 Features
 
