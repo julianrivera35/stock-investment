@@ -13,8 +13,10 @@
           type="text"
           placeholder="Search by name..."
           class="search-input"
+        />
+        <div
+          class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
         >
-        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
           <span class="text-gray-400">🔍</span>
         </div>
       </div>
@@ -45,22 +47,22 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-import { useMainStore } from '@/stores'
+import { ref, computed, onMounted } from "vue";
+import { useMainStore } from "@/stores";
 
-const store = useMainStore()
-const searchTerm = ref('')
+const store = useMainStore();
+const searchTerm = ref("");
 
 const filteredBrokerages = computed(() => {
-  if (!searchTerm.value) return store.brokerages
-  
-  const term = searchTerm.value.toLowerCase()
-  return store.brokerages.filter(brokerage => 
+  if (!searchTerm.value) return store.brokerages;
+
+  const term = searchTerm.value.toLowerCase();
+  return store.brokerages.filter((brokerage) =>
     brokerage.name.toLowerCase().includes(term)
-  )
-})
+  );
+});
 
 onMounted(() => {
-  store.fetchBrokerages()
-})
+  store.fetchBrokerages();
+});
 </script>

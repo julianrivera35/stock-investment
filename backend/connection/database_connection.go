@@ -20,8 +20,9 @@ func GetDatabaseConnection() (*pgx.Conn, error) {
 	database_user := os.Getenv("DATABASE_USER")
 	database_password := os.Getenv("DATABASE_PASSWORD")
 	database_url := os.Getenv("DATABASE_URL")
+	ssl_mode_local := os.Getenv("SSL_LOCAL");
 
-	dsn := "postgresql://" + database_user + ":" + database_password + database_url + "?sslmode=verify-full"
+	dsn := "postgresql://" + database_user + ":" + database_password + database_url + "?sslmode="+ ssl_mode_local;
 	ctx := context.Background()
 	conn, err := pgx.Connect(ctx, dsn)
 	if err != nil {

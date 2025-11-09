@@ -132,14 +132,6 @@ CREATE TABLE analyst_recommendation(
   updated_at TIMESTAMPTZ DEFAULT now()
 );
 
--- Create indexes
-CREATE INDEX company_ticker_idx ON company(ticker);
-CREATE INDEX brokerage_name_idx ON brokerage(name);
-CREATE INDEX analyst_recommendation_company_time ON analyst_recommendation(company_id, time DESC);
-CREATE INDEX analyst_recommendation_time ON analyst_recommendation(time DESC);
-CREATE INDEX analyst_recommendation_brokerage_time ON analyst_recommendation(brokerage_id, time DESC);
-```
-
 ## 🔧 Configuration
 
 ### Backend Environment Variables

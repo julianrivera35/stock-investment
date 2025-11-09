@@ -57,12 +57,12 @@ export const useMainStore = defineStore("main", () => {
   async function fetchAllRecommendations() {
     // Prevent multiple fetches
     if (loading.value || dataFetched.value) {
-      console.log('Already loading or data already fetched, skipping...')
+      console.log("Already loading or data already fetched, skipping...");
       return;
     }
 
     try {
-      console.log('🚀 Starting to fetch recommendations...')
+      console.log("🚀 Starting to fetch recommendations...");
       loading.value = true;
       error.value = null;
       recommendations.value = [];
@@ -81,11 +81,14 @@ export const useMainStore = defineStore("main", () => {
         return;
       }
 
-      totalRecommendations.value = firstResponse.meta?.total || firstResponse.data.length;
+      totalRecommendations.value =
+        firstResponse.meta?.total || firstResponse.data.length;
       recommendations.value = [...firstResponse.data];
       offset += limit;
 
-      console.log(`✅ Loaded ${recommendations.value.length}/${totalRecommendations.value} recommendations`)
+      console.log(
+        `✅ Loaded ${recommendations.value.length}/${totalRecommendations.value} recommendations`
+      );
 
       while (hasMore && offset < totalRecommendations.value) {
         const response = await apiService.getRecommendations({ limit, offset });
@@ -93,7 +96,9 @@ export const useMainStore = defineStore("main", () => {
         if (response.success) {
           recommendations.value = [...recommendations.value, ...response.data];
           offset += limit;
-          console.log(`📈 Progress: ${recommendations.value.length}/${totalRecommendations.value}`)
+          console.log(
+            `📈 Progress: ${recommendations.value.length}/${totalRecommendations.value}`
+          );
 
           await new Promise((resolve) => setTimeout(resolve, 100));
         } else {
@@ -101,10 +106,9 @@ export const useMainStore = defineStore("main", () => {
           error.value = response.error || "Failed to fetch recommendations";
         }
       }
-      
+
       dataFetched.value = true;
-      console.log('🎉 All data fetched successfully!')
-      
+      console.log("🎉 All data fetched successfully!");
     } catch (err) {
       error.value = "Network error: " + err;
     } finally {
@@ -155,6 +159,6 @@ export const useMainStore = defineStore("main", () => {
     //Actions
     fetchAllRecommendations,
     fetchCompanies,
-    fetchBrokerages
-  }
+    fetchBrokerages,
+  };
 });

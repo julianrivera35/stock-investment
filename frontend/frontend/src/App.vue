@@ -13,7 +13,6 @@
             <span class="text-2xl">📊</span>
             <span class="ml-2 text-xl font-bold text-gray-900">AnalystHub</span>
           </div>
-          
           <!-- Navigation -->
           <nav class="flex space-x-8">
             <router-link

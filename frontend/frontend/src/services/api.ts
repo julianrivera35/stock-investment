@@ -1,6 +1,6 @@
 import axios from "axios";
 import env from "@/config/env";
-import { endpoints, buildUrl } from "@/config/endpoints";
+import { endpoints } from "@/config/endpoints";
 import type { Company, Brokerage, Recommendation, APIResponse } from "@/types";
 
 const api = axios.create({

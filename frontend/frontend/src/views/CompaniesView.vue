@@ -13,8 +13,10 @@
           type="text"
           placeholder="Search by name or ticker..."
           class="search-input"
+        />
+        <div
+          class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
         >
-        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
           <span class="text-gray-400">🔍</span>
         </div>
       </div>
@@ -34,7 +36,9 @@
             <tr v-for="company in filteredCompanies" :key="company.id">
               <td class="table-cell">
                 <div class="flex items-center">
-                  <div class="h-8 w-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                  <div
+                    class="h-8 w-8 bg-blue-100 rounded-full flex items-center justify-center mr-3"
+                  >
                     <span class="text-blue-600 font-semibold text-sm">
                       {{ company.name.charAt(0) }}
                     </span>
@@ -42,7 +46,9 @@
                   {{ company.name }}
                 </div>
               </td>
-              <td class="table-cell font-mono font-semibold">{{ company.ticker }}</td>
+              <td class="table-cell font-mono font-semibold">
+                {{ company.ticker }}
+              </td>
             </tr>
           </tbody>
         </table>
@@ -56,23 +62,24 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-import { useMainStore } from '@/stores'
+import { ref, computed, onMounted } from "vue";
+import { useMainStore } from "@/stores";
 
-const store = useMainStore()
-const searchTerm = ref('')
+const store = useMainStore();
+const searchTerm = ref("");
 
 const filteredCompanies = computed(() => {
-  if (!searchTerm.value) return store.companies
-  
-  const term = searchTerm.value.toLowerCase()
-  return store.companies.filter(company => 
-    company.name.toLowerCase().includes(term) || 
-    company.ticker.toLowerCase().includes(term)
-  )
-})
+  if (!searchTerm.value) return store.companies;
+
+  const term = searchTerm.value.toLowerCase();
+  return store.companies.filter(
+    (company) =>
+      company.name.toLowerCase().includes(term) ||
+      company.ticker.toLowerCase().includes(term)
+  );
+});
 
 onMounted(() => {
-  store.fetchCompanies()
-})
+  store.fetchCompanies();
+});
 </script>
