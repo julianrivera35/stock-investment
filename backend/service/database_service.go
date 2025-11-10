@@ -23,7 +23,7 @@ type RecommendationData struct {
 }
 
 // Ctx is context.Context that handles request timeouts, cancellations and deadlines. Prevents queries from hanging indefinitely. Allows to stop operations if needed. Required for database operations.
-func InsertOrGetCompany(conn *pgx.Conn, ctx context.Context, ticker, name string) (string, error) {
+func InsertOrGetCompany(conn connection.DBConnection, ctx context.Context, ticker, name string) (string, error) {
 	var companyID string
 
 	err := conn.QueryRow(ctx,
@@ -49,7 +49,7 @@ func InsertOrGetCompany(conn *pgx.Conn, ctx context.Context, ticker, name string
 	return companyID, nil
 }
 
-func InsertOrGetBrokerage(conn *pgx.Conn, ctx context.Context, name string) (string, error) {
+func InsertOrGetBrokerage(conn connection.DBConnection, ctx context.Context, name string) (string, error) {
 	var brokerageID string
 
 	err := conn.QueryRow(ctx,
@@ -75,7 +75,7 @@ func InsertOrGetBrokerage(conn *pgx.Conn, ctx context.Context, name string) (str
 	return brokerageID, nil
 }
 
-func InsertRecommendation(conn *pgx.Conn, ctx context.Context, data RecommendationData) error {
+func InsertRecommendation(conn connection.DBConnection, ctx context.Context, data RecommendationData) error {
 	//Get or create company
 	companyID, err := InsertOrGetCompany(conn, ctx, data.Ticker, data.Company)
 	if err != nil {
@@ -125,12 +125,12 @@ func SaveRecommendations(recommendations []RecommendationData) error {
 	if err != nil {
 		return fmt.Errorf("failed to get database connection: %v", err)
 	}
-	defer conn.Close(context.Background())
+	defer conn.CloseConn(context.Background())
 
 	ctx := context.Background()
 
 	//Start transaction
-	tx, err := conn.Begin(ctx)
+	tx, err := conn.BeginConn(ctx)
 	if err != nil {
 		return fmt.Errorf("failed to begin transaction: %v", err)
 	}

@@ -1,9 +1,10 @@
 package main
 
 import (
-	"fmt"
-	"stock-investment-backend/connection"
 	"flag"
+	"fmt"
+	"log"
+	"stock-investment-backend/connection"
 	"stock-investment-backend/server"
 	"stock-investment-backend/service"
 )
@@ -20,7 +21,9 @@ func main() {
 
 	// Test database connection
 	fmt.Println("Testing database connection...")
-	connection.TestDatabaseConnection()
+	if err := connection.TestDatabaseConnection(); err != nil {
+		log.Fatal(err)
+	}
 
 	if *fetchMode {
 		// Fetch API data and save to database

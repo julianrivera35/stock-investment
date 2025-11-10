@@ -42,7 +42,7 @@ func GetAllCompanies() ([]Company, error) {
 	if err != nil {
 		return nil, fmt.Errorf("database connection failed: %v", err)
 	}
-	defer conn.Close(context.Background())
+	defer conn.CloseConn(context.Background())
 
 	ctx := context.Background()
 	rows, err := conn.Query(ctx, `
@@ -75,7 +75,7 @@ func GetCompanyByTicker(ticker string) (*Company, error) {
 	if err != nil {
 		return nil, fmt.Errorf("database connection failed: %v", err)
 	}
-	defer conn.Close(context.Background())
+	defer conn.CloseConn(context.Background())
 
 	ctx := context.Background()
 	var c Company
@@ -96,7 +96,7 @@ func GetAllBrokerages() ([]Brokerage, error) {
 	if err != nil {
 		return nil, fmt.Errorf("database connection failed: %v", err)
 	}
-	defer conn.Close(context.Background())
+	defer conn.CloseConn(context.Background())
 
 	ctx := context.Background()
 	rows, err := conn.Query(ctx, `
@@ -128,7 +128,7 @@ func GetRecommendations(limit, offset int, ticker, brokerageID string) ([]Recomm
 	if err != nil {
 		return nil, 0, fmt.Errorf("database connection failed: %v", err)
 	}
-	defer conn.Close(context.Background())
+	defer conn.CloseConn(context.Background())
 
 	ctx := context.Background()
 
