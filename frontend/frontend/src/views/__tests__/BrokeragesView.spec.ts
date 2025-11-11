@@ -3,7 +3,7 @@ import { describe, it, expect, beforeEach, vi } from "vitest";
 import { mount } from "@vue/test-utils";
 import { createPinia, setActivePinia } from "pinia";
 import BrokeragesView from "../BrokeragesView.vue";
-import { useMainStore } from '../../stores/index';
+import { useMainStore } from "../../stores/index";
 
 describe("BrokeragesView", () => {
   beforeEach(() => {
