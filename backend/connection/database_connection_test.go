@@ -307,3 +307,75 @@ func TestTestDatabaseConnection_Success(t *testing.T) {
 	assert.NoError(t, err)
 	assert.True(t, mockConn.CloseCalled, "Connection should be closed")
 }
+
+func TestTestDatabaseConnection_ConnectionFailed(t *testing.T){
+	teardown := setupTest()
+	defer teardown()
+
+	expectedErr := errors.New("database connection failed")
+
+	mockConfig := &MockConfigLoader{
+		LoadFunc: func() error{
+			return nil
+		},
+		GetEnvFunc: func (key string) string {
+			return "test"
+		},
+	}
+
+	mockConnector := &MockDBConnector{
+		ConnectFunc: func(ctx context.Context, dsn string) (DBConnection, error) {
+			return nil, expectedErr
+		},
+	}
+
+	configLoader = mockConfig
+	dbConnector = mockConnector
+
+	err := TestDatabaseConnection()
+
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "database connection failed")
+}
+
+func TestTestDatabaseConnection_QueryFail(t *testing.T){
+	teardown := setupTest()
+	defer teardown()
+
+	expectedErr := errors.New("failed to execute test query")
+
+	mockConfig := &MockConfigLoader{
+		LoadFunc: func() error{
+			return nil
+		},
+		GetEnvFunc: func (key string) string {
+			return "test"
+		},
+	}
+
+	mockRow := &MockRow{
+		ScanFunc: func(dest ...interface{}) error {
+			return expectedErr
+		},
+	}
+	mockConn := &MockDBConnection{
+		QueryRowFunc: func(ctx context.Context, sql string, args ...interface{}) pgx.Row {
+			return mockRow
+		},
+	}
+
+	mockConnector := &MockDBConnector{
+		ConnectFunc: func(ctx context.Context, dsn string) (DBConnection, error) {
+			return mockConn, nil
+		},
+	}
+
+	configLoader = mockConfig
+	dbConnector = mockConnector
+
+	err := TestDatabaseConnection()
+
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "failed to execute test query")
+	assert.True(t, mockConn.CloseCalled, "Connection should be closed")
+}
